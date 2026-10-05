@@ -166,7 +166,7 @@ $ curl -X POST http://localhost:8000/predict -H "Content-Type: application/json"
 
 ![Requisição ao /predict e a resposta da API](imagens/resultado-predict.png)
 
-- Print da página `/docs` da API. A requisição leva os 8 indicadores e a resposta volta com a direção e a probabilidade de alta, código 200.
+- Print da página `/docs` da API. A requisição leva os 8 indicadores e a resposta volta com a direção e a probabilidade de alta
 
 **Containers no ar:**
 
@@ -185,5 +185,4 @@ $ curl -X POST http://localhost:8000/predict -H "Content-Type: application/json"
 ![Acerto do modelo contra o palpite que diz "sobe" todo dia](imagens/resultado-acerto.png)
 
 - No período de teste, que o modelo nunca viu no treino, ele acertou a direção em 51,4% dos dias. Dizer "sobe" todo dia acertaria 50,4%.
-- Na prática é empate. O que a atividade pede é a integração entre treino, artefato e inferência, e essa parte funciona de ponta a ponta.
 - Os gráficos saem do `metricas.json` gravado pelo treino, com o script [`graficos.py`](graficos.py).
