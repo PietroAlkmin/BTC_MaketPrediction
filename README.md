@@ -52,4 +52,128 @@ Diagrama UML de sequência:
 
 Parti para a criação do container de treinamento, baixei as dependencias e importei os indices que comentei lá em cima. Salvei em CSV esses dados para facilitar manipulação posterior. 
 
-- Falar se forçar e de maneira direta sobre a primeira implementação
+**Arquivos da primeira implementação:**
+
+| Arquivo | O que faz |
+|---|---|
+| [`baixar_dados.py`](baixar_dados.py) | Baixa IBOV e DJP do Yahoo e grava `dados/indices.csv`. Roda fora do Docker. |
+| [`treino/treinar.py`](treino/treinar.py) | Calcula os indicadores, treina, testa e grava o modelo. |
+| [`api/main.py`](api/main.py) | Carrega o modelo e responde `/health` e `/predict`. |
+| [`docker-compose.yml`](docker-compose.yml) | Sobe os dois containers e monta a pasta `modelo/` como volume. |
+
+**Dados:**
+
+- A base tem 4.049 pregões, de 04/01/2010 a 02/10/2026.
+- O dia corrente fica de fora: com o pregão aberto, o Yahoo devolve um valor parcial, que não é fechamento.
+
+**Container de treino:**
+
+```dockerfile
+FROM python:3.12-slim
+WORKDIR /app
+COPY requirements.txt .
+RUN pip install --no-cache-dir -r requirements.txt
+COPY treinar.py .
+CMD ["python", "treinar.py"]
+```
+
+- Imagem `slim` com só três bibliotecas: pandas, scikit-learn e joblib.
+- O `requirements.txt` entra antes do código, então mudar o script não reinstala as bibliotecas.
+- O container roda o treino e termina, não fica no ar.
+
+Os indicadores saem em pandas, sem biblioteca de indicadores:
+
+```python
+def indicadores(preco: pd.Series) -> pd.DataFrame:
+    delta = preco.diff()
+    ganho = delta.clip(lower=0).ewm(alpha=1 / 14, adjust=False).mean()
+    perda = (-delta.clip(upper=0)).ewm(alpha=1 / 14, adjust=False).mean()
+    rsi = 100 - 100 / (1 + ganho / perda)
+    # MACD em % do preço: em pontos, a escala muda com o nível do índice
+    macd = (preco.ewm(span=12, adjust=False).mean() - preco.ewm(span=26, adjust=False).mean()) / preco * 100
+    sinal = macd.ewm(span=9, adjust=False).mean()
+    return pd.DataFrame({"rsi": rsi, "macd": macd, "macd_sinal": sinal, "macd_hist": macd - sinal})
+```
+
+O alvo e o corte entre treino e teste:
+
+```python
+# alvo: fechamento do pregão seguinte acima do fechamento do dia
+alta = (precos["ibov"].shift(-1) > precos["ibov"]).astype(int)
+
+corte = int(len(x) * 0.8)  # corte cronológico, sem embaralhar
+x_treino, x_teste, y_treino, y_teste = x[:corte], x[corte:], alta[:corte], alta[corte:]
+
+modelo = make_pipeline(StandardScaler(), LogisticRegression()).fit(x_treino.to_numpy(), y_treino)
+```
+
+- Treino: 26/02/2010 a 14/06/2023, 3.210 pregões. Teste: 15/06/2023 a 01/10/2026, 803 pregões.
+- Os 35 primeiros dias ficam de fora, para as médias do MACD estabilizarem.
+- O `modelo.joblib` guarda o modelo e a ordem das 8 entradas juntos, para a API usar a mesma ordem do treino.
+
+**Container de inferência:**
+
+```python
+artefato = joblib.load("/modelo/modelo.joblib")
+modelo, entradas = artefato["modelo"], artefato["entradas"]
+
+
+@app.get("/health")
+def health():
+    return {"status": "ok"}
+
+
+@app.post("/predict")
+def predict(indicadores: Indicadores):
+    # a ordem das entradas vem do artefato, a mesma usada no treino
+    linha = [[getattr(indicadores, nome) for nome in entradas]]
+    probabilidade = float(modelo.predict_proba(linha)[0, 1])
+    return {"direcao": "alta" if probabilidade >= 0.5 else "queda", "probabilidade_alta": round(probabilidade, 4)}
+```
+
+- O modelo é carregado uma vez, quando a API sobe.
+- O `/predict` valida a entrada: faltando um dos 8 indicadores, devolve erro 422.
+- O Dockerfile é o mesmo do treino, mudando o arquivo copiado e o comando final, que sobe o uvicorn na porta 8000.
+
+**Ligação entre os dois containers:**
+
+```yaml
+services:
+  treino:
+    build: ./treino
+    volumes:
+      - ./dados:/dados:ro
+      - ./modelo:/modelo
+
+  api:
+    build: ./api
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./modelo:/modelo:ro
+    depends_on:
+      treino:
+        condition: service_completed_successfully
+```
+
+- Só o treino escreve em `modelo/`. A API e os dados entram como somente leitura (`:ro`).
+- O `depends_on` garante a ordem: a API só sobe depois que o treino termina sem erro.
+
+**Primeira execução:**
+
+```
+$ docker compose up --build -d
+$ docker compose ps -a
+api      running   0.0.0.0:8000->8000/tcp
+treino   exited    Exited (0)
+
+$ curl http://localhost:8000/health
+{"status":"ok"}
+
+$ curl -X POST http://localhost:8000/predict -H "Content-Type: application/json" -d @modelo/exemplo.json
+{"direcao":"alta","probabilidade_alta":0.5082}
+```
+
+- O `exemplo.json` tem os 8 indicadores do fechamento de 02/10, então a predição vale para o pregão de 05/10.
+- Acerto de direção no teste: 51,4%, contra 50,4% do palpite "sempre sobe". Em 803 pregões a diferença são 8 acertos, dentro da margem de sorte.
+- O modelo previu alta em 79,6% dos dias do teste. Fica como limitação conhecida.
