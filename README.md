@@ -120,7 +120,7 @@ def predict(indicadores: Indicadores):
 - O `/predict` valida a entrada: faltando um dos 8 indicadores, devolve erro 422.
 - O Dockerfile é o mesmo do treino, mudando o arquivo copiado e o comando final, que sobe o uvicorn na porta 8000.
 
-**Dockercompose:**
+**Docker Compose:**
 
 ```yaml
 services:
