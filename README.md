@@ -1,7 +1,14 @@
-# Predição do preço do Bitcoin com Docker
+#Pietro Alkmin
 
-Atividade ponderada do Módulo 7 de Engenharia de Computação (Inteli, 2026).
 
-A solução treina um modelo para estimar o preço futuro do Bitcoin a partir de dados históricos e disponibiliza as predições por um backend em Python, cada etapa em um container Docker.
+- Começando pela tese, quero "prever" o movimento do IBOV com base na análise de correlação com BCOM, isso vai ser metrificado principalmente por RSI, MACD, MACD signal e MACD Hist. A primeira coisa que vou fazer é definir a lógica, arquitetura, dependências, modelos e diagrama UML. 
 
-Enunciado: https://github.com/Murilo-ZC/Atividade-Ponderada-M7-2026-EC
+Defini que vou usar a biblioteca do Yahoo finance para comparar dois índices principais, IBOV e BCOM(Bloomberg Commodity Index) e por conta de tempo, defini que vou usar um modelo simples de tendência para calcular os indicadores. 
+
+Para a arquitetura/lógica: 
+
+- Aqui vai ficar uma imagem do excalidraw explicando a ideia, dependência, ferramentas e Lógica
+
+Para o funcionamento esperado do sistema:
+
+- 
