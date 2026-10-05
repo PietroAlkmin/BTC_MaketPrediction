@@ -15,16 +15,13 @@ Imagem do Excalidraw explicando a ideia, dependência, ferramentas e lógica:
 **Por que regressão logística inicialmente:**
 
 - Quero prever o movimento, e movimento é direção: sobe ou cai. Isso é classificação, então o modelo devolve a probabilidade de o IBOV fechar em alta no pregão seguinte.
-- Treina em menos de um segundo, o que cabe nos 100 minutos da atividade.
-- A régua fica simples de explicar: acerto no teste contra o palpite "sempre sobe", já que o IBOV sobe em 51,1% dos pregões desde 2010.
-- O custo é não devolver um preço. Se precisar de valor, troco por regressão linear do retorno com as mesmas entradas.
-
+- Fica simples de explicar: acerto no teste contra o palpite "sempre sobe", já que o IBOV sobe em 51,1% dos pregões desde 2010.
+- 
 **Passo a passo dos dados:**
 
 - O BCOM não existe no Yahoo Finance: os códigos `^BCOM` e `^BCOMTR` voltam vazios. Por isso ele entra pelo DJP, fundo que replica o índice.
-- Ficam os 4.049 dias em que IBOV e DJP negociaram juntos, em um CSV dentro do repositório, para o treino não depender de internet.
+- Ficam os dias em que IBOV e DJP negociaram juntos, em um CSV dentro do repositório.
 - Antes de treinar, a correlação medida entre os dois foi 0,34 no mesmo dia e praticamente zero (−0,001) de um dia para o outro. Então o acerto esperado fica perto de 51%, e isso já entra como limitação conhecida.
-- O MACD entra dividido pelo preço, para a escala não mudar com o nível do índice.
 
 **Por que essa arquitetura:**
 
