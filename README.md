@@ -46,3 +46,6 @@ Diagrama UML de sequência:
 
 - Primeiro o treino roda e grava o modelo, só depois a API sobe e lê o arquivo. Se a ordem inverter, a API sobe sem modelo.
 - Com a API no ar, o client confere o `/health` e manda os 8 indicadores para o `/predict`, que devolve a direção e a probabilidade de alta.
+
+
+# 2 - Implementação da Infra 
