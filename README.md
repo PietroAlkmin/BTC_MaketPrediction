@@ -178,8 +178,6 @@ $ curl -X POST http://localhost:8000/predict -H "Content-Type: application/json"
 
 - No fim do mesmo comando, o container de treino roda e termina (`Exited`) e só então o da API sobe (`Started`).
 
-- Aqui vai ficar o print do Docker Desktop com os dois containers
-
 **O que o modelo aprendeu:**
 
 ![Peso de cada indicador na decisão do modelo](imagens/resultado-pesos.png)
