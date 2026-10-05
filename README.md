@@ -61,11 +61,6 @@ Parti para a criação do container de treinamento, baixei as dependencias e imp
 | [`api/main.py`](api/main.py) | Carrega o modelo e responde `/health` e `/predict`. |
 | [`docker-compose.yml`](docker-compose.yml) | Sobe os dois containers e monta a pasta `modelo/` como volume. |
 
-**Dados:**
-
-- A base tem 4.049 pregões, de 04/01/2010 a 02/10/2026.
-- O dia corrente fica de fora: com o pregão aberto, o Yahoo devolve um valor parcial, que não é fechamento.
-
 **Container de treino:**
 
 ```dockerfile
@@ -80,20 +75,6 @@ CMD ["python", "treinar.py"]
 - Imagem `slim` com só três bibliotecas: pandas, scikit-learn e joblib.
 - O `requirements.txt` entra antes do código, então mudar o script não reinstala as bibliotecas.
 - O container roda o treino e termina, não fica no ar.
-
-Os indicadores saem em pandas, sem biblioteca de indicadores:
-
-```python
-def indicadores(preco: pd.Series) -> pd.DataFrame:
-    delta = preco.diff()
-    ganho = delta.clip(lower=0).ewm(alpha=1 / 14, adjust=False).mean()
-    perda = (-delta.clip(upper=0)).ewm(alpha=1 / 14, adjust=False).mean()
-    rsi = 100 - 100 / (1 + ganho / perda)
-    # MACD em % do preço: em pontos, a escala muda com o nível do índice
-    macd = (preco.ewm(span=12, adjust=False).mean() - preco.ewm(span=26, adjust=False).mean()) / preco * 100
-    sinal = macd.ewm(span=9, adjust=False).mean()
-    return pd.DataFrame({"rsi": rsi, "macd": macd, "macd_sinal": sinal, "macd_hist": macd - sinal})
-```
 
 O alvo e o corte entre treino e teste:
 
