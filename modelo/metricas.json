@@ -1,0 +1,16 @@
+{
+  "treino": {
+    "de": "2010-02-26",
+    "ate": "2023-06-14",
+    "dias": 3210
+  },
+  "teste": {
+    "de": "2023-06-15",
+    "ate": "2026-10-01",
+    "dias": 803
+  },
+  "acerto_treino": 0.5146,
+  "acerto_teste": 0.5143,
+  "acerto_sempre_sobe": 0.5044,
+  "previsoes_de_alta_no_teste": 0.7958
+}
