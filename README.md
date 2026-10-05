@@ -28,7 +28,7 @@ Imagem do Excalidraw explicando a ideia, dependência, ferramentas e lógica:
 - Dois containers, como o enunciado pede: um treina e termina, o outro fica no ar servindo a predição.
 - O modelo chega à inferência por um volume compartilhado, a pasta `modelo/`: o treino grava e a API lê ao subir. Preferi o volume a copiar o arquivo para dentro da imagem porque assim o caminho do artefato fica visível.
 - O download dos dados fica fora do Docker e roda uma vez só.
-- O backend é FastAPI com as duas rotas que o enunciado cobra: `GET /health` e `POST /predict`.
+- O backend é FastAPI com as duas rotas que o enunciado está pedindo: `GET /health` e `POST /predict`.
 
 ## Funcionamento esperado do sistema
 
@@ -37,13 +37,12 @@ Diagrama UML de componentes:
 ![Diagrama UML de componentes](imagens/uml-componentes.png)
 
 - Mostra quem são as peças e o que cada uma entrega para a outra: dados, treino, volume, inferência e cliente.
-- Responde o que o enunciado cobra: o modelo treinado chega ao container de inferência porque o treino grava no volume e a API lê de lá.
-- Foi feito em Mermaid por ser mais rápido que desenhar. O Mermaid não tem o diagrama de componentes da UML, então usei o fluxograma com subgrupos.
-
+- Tras o que o enunciado pede: o modelo treinado chega ao container de inferência porque o treino grava no volume e a API lê de lá.
+- Foi feito em Mermaid por ser mais rápido que desenhar, código gerado por IA.
+- 
 Diagrama UML de sequência:
 
 ![Diagrama UML de sequência](imagens/uml-sequencia.png)
 
-- Mostra a ordem em que as coisas acontecem, que o diagrama de componentes não mostra.
-- Primeiro o treino roda e grava o modelo; só depois a API sobe e lê o arquivo. Se a ordem inverter, a API sobe sem modelo.
-- Com a API no ar, o cliente confere o `/health` e manda os 8 indicadores para o `/predict`, que devolve a direção e a probabilidade de alta.
+- Primeiro o treino roda e grava o modelo, só depois a API sobe e lê o arquivo. Se a ordem inverter, a API sobe sem modelo.
+- Com a API no ar, o client confere o `/health` e manda os 8 indicadores para o `/predict`, que devolve a direção e a probabilidade de alta.
