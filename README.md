@@ -17,7 +17,7 @@ Imagem do Excalidraw explicando a ideia, dependência, ferramentas e lógica:
 - Quero prever o movimento, e movimento é direção: sobe ou cai. Isso é classificação, então o modelo devolve a probabilidade de o IBOV fechar em alta no pregão seguinte.
 - Fica simples de explicar: acerto no teste contra o palpite "sempre sobe", já que o IBOV sobe em 51,1% dos pregões desde 2010.
 - 
-**Passo a passo dos dados:**
+**Algumas considerações dos dados(Obtidos através de análise com IA):**
 
 - O BCOM não existe no Yahoo Finance: os códigos `^BCOM` e `^BCOMTR` voltam vazios. Por isso ele entra pelo DJP, fundo que replica o índice.
 - Ficam os dias em que IBOV e DJP negociaram juntos, em um CSV dentro do repositório.
