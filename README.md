@@ -161,3 +161,29 @@ $ curl -X POST http://localhost:8000/predict -H "Content-Type: application/json"
 {"direcao":"alta","probabilidade_alta":0.5082}
 ```
 # 3 - Backtest/Resultados primeira run
+
+**A predição funcionando:**
+
+![Requisição ao /predict e a resposta da API](imagens/resultado-predict.png)
+
+- Print da página `/docs` da API. A requisição leva os 8 indicadores e a resposta volta com a direção e a probabilidade de alta, código 200.
+
+**Containers no ar:**
+
+- Aqui vai ficar o print do terminal com `docker compose up --build -d` e `docker compose ps -a`
+- Aqui vai ficar o print do Docker Desktop com os dois containers
+
+**O que o modelo aprendeu:**
+
+![Peso de cada indicador na decisão do modelo](imagens/resultado-pesos.png)
+
+- A regressão logística é explicável: cada uma das 8 entradas tem um peso. Barra azul aumenta a chance de "alta", barra laranja diminui.
+- Os pesos são todos pequenos. O modelo quase não usa os indicadores e responde "alta" na maioria dos dias.
+
+**Quanto ele acerta:**
+
+![Acerto do modelo contra o palpite que diz "sobe" todo dia](imagens/resultado-acerto.png)
+
+- No período de teste, que o modelo nunca viu no treino, ele acertou a direção em 51,4% dos dias. Dizer "sobe" todo dia acertaria 50,4%.
+- Na prática é empate. O que a atividade pede é a integração entre treino, artefato e inferência, e essa parte funciona de ponta a ponta.
+- Os gráficos saem do `metricas.json` gravado pelo treino, com o script [`graficos.py`](graficos.py).
