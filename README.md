@@ -170,7 +170,14 @@ $ curl -X POST http://localhost:8000/predict -H "Content-Type: application/json"
 
 **Containers no ar:**
 
-- Aqui vai ficar o print do terminal com `docker compose up --build -d` e `docker compose ps -a`
+![Início do docker compose up --build -d](imagens/DockerComposeCommand.png)
+
+- O `docker compose up --build -d` começa construindo as duas imagens, a do treino e a da API.
+
+![Fim do docker compose up --build -d](imagens/dockerCompose-ps-a.png)
+
+- No fim do mesmo comando, o container de treino roda e termina (`Exited`) e só então o da API sobe (`Started`).
+
 - Aqui vai ficar o print do Docker Desktop com os dois containers
 
 **O que o modelo aprendeu:**
