@@ -78,7 +78,8 @@ CMD ["python", "treinar.py"]
 
 O alvo e o corte entre treino e teste:
 
-```python
+Obs: Código gerado com IA!
+```python 
 # alvo: fechamento do pregão seguinte acima do fechamento do dia
 alta = (precos["ibov"].shift(-1) > precos["ibov"]).astype(int)
 
@@ -88,11 +89,14 @@ x_treino, x_teste, y_treino, y_teste = x[:corte], x[corte:], alta[:corte], alta[
 modelo = make_pipeline(StandardScaler(), LogisticRegression()).fit(x_treino.to_numpy(), y_treino)
 ```
 
+Obs: Dados obtidos com código de IA!
 - Treino: 26/02/2010 a 14/06/2023, 3.210 pregões. Teste: 15/06/2023 a 01/10/2026, 803 pregões.
 - Os 35 primeiros dias ficam de fora, para as médias do MACD estabilizarem.
 - O `modelo.joblib` guarda o modelo e a ordem das 8 entradas juntos, para a API usar a mesma ordem do treino.
 
 **Container de inferência:**
+
+Obs: Código gerado com IA!
 
 ```python
 artefato = joblib.load("/modelo/modelo.joblib")
