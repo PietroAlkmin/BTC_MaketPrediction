@@ -12,5 +12,15 @@
   "acerto_treino": 0.5146,
   "acerto_teste": 0.5143,
   "acerto_sempre_sobe": 0.5044,
-  "previsoes_de_alta_no_teste": 0.7958
+  "previsoes_de_alta_no_teste": 0.7958,
+  "pesos": {
+    "ibov_rsi": -0.0381,
+    "ibov_macd": 0.0037,
+    "ibov_macd_sinal": -0.0107,
+    "ibov_macd_hist": 0.0455,
+    "bcom_rsi": 0.0145,
+    "bcom_macd": -0.008,
+    "bcom_macd_sinal": 0.0021,
+    "bcom_macd_hist": -0.035
+  }
 }

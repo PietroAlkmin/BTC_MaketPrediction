@@ -47,6 +47,8 @@ metricas = {
     "acerto_teste": round(float((previsto == y_teste).mean()), 4),
     "acerto_sempre_sobe": round(float(y_teste.mean()), 4),
     "previsoes_de_alta_no_teste": round(float(previsto.mean()), 4),
+    # peso de cada entrada padronizada: positivo aumenta a chance de alta
+    "pesos": dict(zip(ENTRADAS, modelo[-1].coef_[0].round(4).tolist())),
 }
 
 MODELO.mkdir(exist_ok=True)
