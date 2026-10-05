@@ -49,3 +49,7 @@ Diagrama UML de sequência:
 
 
 # 2 - Implementação da Infra 
+
+Parti para a criação do container de treinamento, baixei as dependencias e importei os indices que comentei lá em cima. Salvei em CSV esses dados para facilitar manipulação posterior. 
+
+- Falar se forçar e de maneira direta sobre a primeira implementação
