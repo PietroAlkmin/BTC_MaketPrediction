@@ -16,7 +16,7 @@ Imagem do Excalidraw explicando a ideia, dependência, ferramentas e lógica:
 
 - Quero prever o movimento, e movimento é direção: sobe ou cai. Isso é classificação, então o modelo devolve a probabilidade de o IBOV fechar em alta no pregão seguinte.
 - Fica simples de explicar: acerto no teste contra o palpite "sempre sobe", já que o IBOV sobe em 51,1% dos pregões desde 2010.
-- 
+
 **Algumas considerações dos dados(Obtidos através de análise com IA):**
 
 - O BCOM não existe no Yahoo Finance: os códigos `^BCOM` e `^BCOMTR` voltam vazios. Por isso ele entra pelo DJP, fundo que replica o índice.
@@ -55,6 +55,11 @@ Parti para a criação do container de treinamento, baixei as dependencias e imp
 Mais algumas decisões:
 - Por conta de tempo já parti a construção da solução no container
 - Todas as dependências instaladas no container.
+- Só dois scripts rodam fora do container: o que baixa os dados e o que gera os gráficos.
+- O treino roda de novo a cada `docker compose up`. Leva segundos, e a API sempre sobe com o modelo recém-treinado.
+- O modelo treinado também fica versionado na pasta `modelo/`.
+- Por conta de tempo, as versões das bibliotecas não foram fixadas.
+- A solução foi testada a partir de um clone limpo do GitHub: sobe, treina e responde.
  
 
 
