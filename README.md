@@ -39,7 +39,7 @@ Diagrama UML de componentes:
 - Mostra quem são as peças e o que cada uma entrega para a outra: dados, treino, volume, inferência e cliente.
 - Tras o que o enunciado pede: o modelo treinado chega ao container de inferência porque o treino grava no volume e a API lê de lá.
 - Foi feito em Mermaid por ser mais rápido que desenhar, código gerado por IA.
-- 
+ 
 Diagrama UML de sequência:
 
 ![Diagrama UML de sequência](imagens/uml-sequencia.png)
@@ -51,6 +51,12 @@ Diagrama UML de sequência:
 # 2 - Implementação da Infra 
 
 Parti para a criação do container de treinamento, baixei as dependencias e importei os indices que comentei lá em cima. Salvei em CSV esses dados para facilitar manipulação posterior. 
+
+Mais algumas decisões:
+- Por conta de tempo já parti a construção da solução no container
+- Todas as dependências instaladas no container.
+ 
+
 
 **Arquivos da primeira implementação:**
 
