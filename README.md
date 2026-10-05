@@ -78,7 +78,7 @@ CMD ["python", "treinar.py"]
 
 O alvo e o corte entre treino e teste:
 
-Obs: Código gerado com IA!
+**Obs: Código gerado com IA!**
 ```python 
 # alvo: fechamento do pregão seguinte acima do fechamento do dia
 alta = (precos["ibov"].shift(-1) > precos["ibov"]).astype(int)
@@ -89,14 +89,14 @@ x_treino, x_teste, y_treino, y_teste = x[:corte], x[corte:], alta[:corte], alta[
 modelo = make_pipeline(StandardScaler(), LogisticRegression()).fit(x_treino.to_numpy(), y_treino)
 ```
 
-Obs: Dados obtidos com código de IA!
+**Obs: Dados obtidos com código de IA!**
 - Treino: 26/02/2010 a 14/06/2023, 3.210 pregões. Teste: 15/06/2023 a 01/10/2026, 803 pregões.
 - Os 35 primeiros dias ficam de fora, para as médias do MACD estabilizarem.
 - O `modelo.joblib` guarda o modelo e a ordem das 8 entradas juntos, para a API usar a mesma ordem do treino.
 
 **Container de inferência:**
 
-Obs: Código gerado com IA!
+**Obs: Código gerado com IA!**
 
 ```python
 artefato = joblib.load("/modelo/modelo.joblib")
@@ -120,7 +120,7 @@ def predict(indicadores: Indicadores):
 - O `/predict` valida a entrada: faltando um dos 8 indicadores, devolve erro 422.
 - O Dockerfile é o mesmo do treino, mudando o arquivo copiado e o comando final, que sobe o uvicorn na porta 8000.
 
-**Ligação entre os dois containers:**
+**Dockercompose:**
 
 ```yaml
 services:
@@ -141,10 +141,12 @@ services:
         condition: service_completed_successfully
 ```
 
-- Só o treino escreve em `modelo/`. A API e os dados entram como somente leitura (`:ro`).
+- Só o treino escreve em `modelo/`. A API e os dados entram como somente leitura
 - O `depends_on` garante a ordem: a API só sobe depois que o treino termina sem erro.
 
 **Primeira execução:**
+
+**Obs: Scripts gerados com IA!**
 
 ```
 $ docker compose up --build -d
@@ -158,7 +160,4 @@ $ curl http://localhost:8000/health
 $ curl -X POST http://localhost:8000/predict -H "Content-Type: application/json" -d @modelo/exemplo.json
 {"direcao":"alta","probabilidade_alta":0.5082}
 ```
-
-- O `exemplo.json` tem os 8 indicadores do fechamento de 02/10, então a predição vale para o pregão de 05/10.
-- Acerto de direção no teste: 51,4%, contra 50,4% do palpite "sempre sobe". Em 803 pregões a diferença são 8 acertos, dentro da margem de sorte.
-- O modelo previu alta em 79,6% dos dias do teste. Fica como limitação conhecida.
+# 3 - Backtest/Resultados primeira run
