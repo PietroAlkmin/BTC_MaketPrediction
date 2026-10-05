@@ -56,12 +56,8 @@ Mais algumas decisões:
 - Por conta de tempo já parti a construção da solução no container
 - Todas as dependências instaladas no container.
 - Só dois scripts rodam fora do container: o que baixa os dados e o que gera os gráficos.
-- O treino roda de novo a cada `docker compose up`. Leva segundos, e a API sempre sobe com o modelo recém-treinado.
-- O modelo treinado também fica versionado na pasta `modelo/`.
 - Por conta de tempo, as versões das bibliotecas não foram fixadas.
-- A solução foi testada a partir de um clone limpo do GitHub: sobe, treina e responde.
  
-
 
 **Arquivos da primeira implementação:**
 
